@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="cKL-Tf-kKH">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="quZ-0r-0h0">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--ToDo Items-->
+        <!--Мои дела-->
         <scene sceneID="A1j-VH-Fp5">
             <objects>
                 <tableViewController id="1e1-JT-ZaF" customClass="TableViewController" customModule="ToDoList" customModuleProvider="target" sceneMemberID="viewController">
@@ -46,7 +46,13 @@
                         </connections>
                     </tableView>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="ToDo Items" id="9di-zT-b4E">
+                    <navigationItem key="navigationItem" title="Мои дела" id="9di-zT-b4E">
+                        <barButtonItem key="leftBarButtonItem" systemItem="reply" id="RWS-gl-ZbM">
+                            <color key="tintColor" red="0.32114860415458679" green="0.69143778085708618" blue="0.31438380479812622" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <connections>
+                                <segue destination="quZ-0r-0h0" kind="presentation" modalTransitionStyle="crossDissolve" id="LPa-HL-0dw"/>
+                            </connections>
+                        </barButtonItem>
                         <rightBarButtonItems>
                             <barButtonItem systemItem="add" id="0d9-vB-pax">
                                 <color key="tintColor" red="0.32114860415458679" green="0.69143778085708618" blue="0.31438380479812622" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -84,7 +90,87 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="i46-8o-TUm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2.3999999999999999" y="5.8470764617691158"/>
+            <point key="canvasLocation" x="180" y="6"/>
+        </scene>
+        <!--Заметки-->
+        <scene sceneID="wk0-nA-Uco">
+            <objects>
+                <tableViewController id="F8c-Fh-G1R" customClass="TableViewControllerHigh" customModule="ToDoList" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="HWd-rc-tBJ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="CellList" textLabel="1Tu-XJ-kiQ" imageView="DZ6-oM-Pjp" style="IBUITableViewCellStyleDefault" id="nWx-kZ-3YU">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="nWx-kZ-3YU" id="JTP-vc-egH">
+                                    <rect key="frame" x="0.0" y="0.0" width="341" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1Tu-XJ-kiQ">
+                                            <rect key="frame" x="16" y="0.0" width="324" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="DZ6-oM-Pjp">
+                                            <rect key="frame" x="16" y="0.0" width="33" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </imageView>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="cKL-Tf-kKH" kind="presentation" id="O6e-br-Cjw"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="F8c-Fh-G1R" id="2cg-74-zYF"/>
+                            <outlet property="delegate" destination="F8c-Fh-G1R" id="w6J-V7-F81"/>
+                        </connections>
+                    </tableView>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="Заметки" id="gRN-5T-oOu">
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="add" id="m2g-Id-98z">
+                                <color key="tintColor" red="0.32114860420000002" green="0.69143778089999997" blue="0.3143838048" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <connections>
+                                    <action selector="pushAddAction:" destination="F8c-Fh-G1R" id="HNW-gu-k1t"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem systemItem="edit" id="xjw-59-nfT">
+                                <color key="tintColor" red="0.32114860420000002" green="0.69143778089999997" blue="0.3143838048" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <connections>
+                                    <action selector="pushEditAction:" destination="F8c-Fh-G1R" id="KAv-Qc-Pys"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1Wx-Xc-fYy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2532" y="-750"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="oNM-jB-X9f">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="quZ-0r-0h0" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Yzc-Jc-sfj">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="F8c-Fh-G1R" kind="relationship" relationship="rootViewController" id="RbE-Re-1lg"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QLR-AP-kid" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1724" y="-750"/>
         </scene>
     </scenes>
     <resources>
