@@ -7,10 +7,10 @@
 //
 
 import UIKit
+var INDEX: Int = 0
 
-var currentList = lists[INDEX]["content"] as! toDoList
-class TableViewController: UITableViewController {
-
+class TableViewControllerHigh: UITableViewController {
+    
     
     @IBAction func pushEditAction(_ sender: Any) {
         tableView.setEditing(!tableView.isEditing, animated: true)
@@ -21,17 +21,17 @@ class TableViewController: UITableViewController {
     }
     
     @IBAction func pushAddAction(_ sender: Any) {
-        let alertController = UIAlertController(title: "Новое дело", message: "", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Новый список", message: "", preferredStyle: .alert)
         
         alertController.addTextField { (textField) in
-            textField.placeholder = "Дело для выполнения"
+            textField.placeholder = "Новый список"
         }
         
         let createAction = UIAlertAction(title: "Создать", style: .default)
         {
             (alert) in
-            currentList.addItem(nameItem: alertController.textFields![0].text!)
-            lists[INDEX]["content"] = currentList
+            let newList = toDoList.init()
+            addList(nameList: alertController.textFields![0].text!, content: newList)
             self.tableView.reloadData()
         }
         let cancelAction = UIAlertAction(title: "Отмена", style: .cancel)
@@ -51,57 +51,50 @@ class TableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         tableView.tableFooterView = UIView()
         tableView.backgroundColor = UIColor.init(cgColor: #colorLiteral(red: 0.998498261, green: 0.9936606288, blue: 0.8962557912, alpha: 1))
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
-
+        
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
-
+    
     // MARK: - Table view data source
-
-//    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return UITableView.automaticDimension
-//    }
-//
-//    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return UITableView.automaticDimension
-//    }
+    
+    //    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    //        return UITableView.automaticDimension
+    //    }
+    //
+    //    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+    //        return UITableView.automaticDimension
+    //    }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        currentList = lists[INDEX]["content"] as! toDoList
-        lists[INDEX]["content"] = currentList
-        return currentList.List.count
+        return lists.count
     }
-
+    
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-
-        // Configure the cell...
-        let currentItem =  currentList.List[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CellList", for: indexPath)
         
-        cell.textLabel?.text = currentItem.title
+        // Configure the cell...
+        let currentItem = lists[indexPath.row]
+        
+        cell.textLabel?.text = currentItem["listTitle"] as? String
         //var text = cell.textLabel?.text
         //if text!.count > 30 {
             //cell.textLabel!.lineBreakMode = .byWordWrapping // notice the 'b' instead of 'B'
             //cell.textLabel!.numberOfLines = 0
         //}
         
-        if (currentItem.isCompleted) == true {
-            cell.imageView?.image = UIImage(named: "check.png")
-        } else {
-            cell.imageView?.image = UIImage(named: "uncheck.png")
-        }
-
         if tableView.isEditing {
             cell.textLabel?.alpha = 0.4
             cell.imageView?.alpha = 0.4
@@ -116,17 +109,17 @@ class TableViewController: UITableViewController {
         if tableView.isEditing {
             tableView.deselectRow(at: indexPath, animated: true)
             
-            let alertController1 = UIAlertController(title: "Изменить дело", message: "", preferredStyle: .alert)
+            let alertController1 = UIAlertController(title: "Изменить список", message: "", preferredStyle: .alert)
             
             alertController1.addTextField { (textField) in
-                textField.text = currentList.List[indexPath.row].title
+                textField.text = lists[indexPath.row]["ListTitle"] as? String
             }
             
             let createAction1 = UIAlertAction(title: "Изменить", style: .default)
             {
                 (alert) in
-                currentList.changeItem(at: indexPath.row, newTitle: alertController1.textFields![0].text!)
-                lists[INDEX]["content"] = currentList
+                changeListName(at: indexPath.row, newTitle: alertController1.textFields![0].text!)
+                //addItem(nameItem: alertController.textFields![0].text!)
                 self.tableView.reloadData()
             }
             let cancelAction1 = UIAlertAction(title: "Отмена", style: .cancel)
@@ -144,13 +137,9 @@ class TableViewController: UITableViewController {
             }
             
         } else {
-            tableView.deselectRow(at: indexPath, animated: true)
-            if currentList.changeState(at: indexPath.row) {
-                tableView.cellForRow(at: indexPath)?.imageView?.image = UIImage(named: "check.png")
-            } else {
-                tableView.cellForRow(at: indexPath)?.imageView?.image = UIImage(named: "uncheck.png")
-            }
-            lists[INDEX]["content"] = currentList
+            INDEX = indexPath.row
+            //print(INDEX)
+            //lists[indexPath.row]["content"] = toDoItems
         }
     }
     
@@ -160,30 +149,28 @@ class TableViewController: UITableViewController {
         return true
     }
     
-
+    
     
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
-            currentList.removeItem(at: indexPath.row)
-            lists[INDEX]["content"] = currentList
+            removeList(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+        }
     }
     
-
+    
     
     // Override to support rearranging the table view.
     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-        currentList.moveItem(from: fromIndexPath.row, to: to.row)
-        lists[INDEX]["content"] = currentList
+        
+        moveList(from: fromIndexPath.row, to: to.row)
         tableView.reloadData()
     }
-
+    
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         if tableView.isEditing {
             return .none
@@ -192,27 +179,27 @@ class TableViewController: UITableViewController {
         }
         
     }
-
+    
     override func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return false
     }
     
     /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
+     // Override to support conditional rearranging of the table view.
+     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+     // Return false if you do not want the item to be re-orderable.
+     return true
+     }
+     */
+    
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destination.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }

@@ -7,41 +7,49 @@
 //
 
 import Foundation
-var toDoItems: [[String: Any]] {
-    set {
-        UserDefaults.standard.set(newValue, forKey: "toDoItemsKey")
-        UserDefaults.standard.synchronize()
-    }
-    get{
-        if let items = UserDefaults.standard.array(forKey: "toDoItemsKey") as? [[String: Any]] {
-            return items
-        } else {
-            return []
-        }
+
+
+struct toDoItem: Codable {
+    var title: String
+    var isCompleted: Bool
+    
+    public init (title: String, isCompleted: Bool) {
+        self.title = title
+        self.isCompleted = isCompleted
     }
 }
 
-//= [["Title": "Позвонить маме", "isCompleted": true], ["Title": "Купить хлеб", "isCompleted": false]]
+struct toDoList: Codable {
+    public init() {
+        List = []
+    }
+    var List: [toDoItem] = []
+    
+    mutating func addItem(nameItem: String, isComplited: Bool = false) {
+        let deal = toDoItem.init(title: nameItem, isCompleted: isComplited)
+        List.append(deal)
+    }
+    
+    mutating func addItem(toDoItem: toDoItem) {
+        List.append(toDoItem)
+    }
+    
+    mutating func changeItem(at index: Int, newTitle: String) {
+        List[index].title = newTitle
+    }
+    
+    mutating func removeItem(at index: Int) {
+        List.remove(at: index)
+    }
 
-func addItem(nameItem: String, isComplited: Bool = false) {
-    toDoItems.append(["Title": nameItem, "isCompleted" : isComplited])
+    mutating func moveItem (from: Int, to: Int) {
+        let itemToMove = List[from]
+        removeItem(at: from)
+        List.insert(itemToMove, at: to)
+    }
+    
+    mutating func changeState(at item: Int) -> Bool {
+        List[item].isCompleted = !(List[item].isCompleted)
+        return List[item].isCompleted
+    }
 }
-
-func changeItem(at index: Int, newTitle: String) {
-    toDoItems[index]["Title"] = newTitle
-}
-func moveItem (from: Int, to: Int) {
-    let itemToMove = toDoItems[from]
-    removeItem(at: from)
-    toDoItems.insert(itemToMove, at: to)
-}
-
-func removeItem(at index: Int) {
-    toDoItems.remove(at: index)
-}
-
-func changeState(at item: Int) -> Bool {
-    toDoItems[item]["isCompleted"] = !(toDoItems[item]["isCompleted"] as! Bool)
-    return toDoItems[item]["isCompleted"] as! Bool
-}
-
